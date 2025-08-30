@@ -1,14 +1,24 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useHabits } from '@/context/HabitsContext';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Home from './Home';
 
 const Index = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
-  );
+  const { habits } = useHabits();
+  const navigate = useNavigate();
+
+  // Auto-navigate to dashboard if user has habits
+  useEffect(() => {
+    if (habits.length > 0) {
+      // Small delay to show the home page briefly
+      const timer = setTimeout(() => {
+        navigate('/dashboard');
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [habits.length, navigate]);
+
+  return <Home />;
 };
 
 export default Index;
